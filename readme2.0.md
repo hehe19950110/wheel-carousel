@@ -1,6 +1,6 @@
 组件化的优点：
 
-当页面有多个轮播时：
+当页面有多个轮播时，代码数量不变，功能同样：
 将
 ```
   let $carousel = document.querySelector('.carousel')
