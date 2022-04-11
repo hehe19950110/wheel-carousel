@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Carousel组件化</title>
+<style>
+  .container {
+    max-width: 800px;
+    margin: 30px auto;
+    border-radius: 5px;
+    box-shadow: 0 0 4px 0 #303030;
+    padding: 16px;
+  }
+
+  .carousel {
+    position: relative;
+    height: 300px;
+  }
+
+  .carousel .panels > a {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    opacity: 0;
+    z-index: 0;
+    transition: all 0.3s;
+  }
+  
+  .carousel .panels > a.active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .carousel .panels > a:nth-child(1) {
+    background-color: rgb(226, 159, 170);
+  }
+  .carousel .panels > a:nth-child(2) {
+    background-color: rgb(227, 246, 18);
+  }
+  .carousel .panels > a:nth-child(3) {
+    background-color: rgb(79, 130, 189);
+  }
+  .carousel .panels > a:nth-child(4) {
+    background-color: rgb(94, 209, 138);
+  }
+
+  .carousel .arrow {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(136, 131, 132, 0.3);
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 10;
+  }
+
+  .carousel .arrow-pre {
+    left: 10px;
+    transform: translateX(-100%) translateY(-50%);
+  }
+  .carousel:hover .arrow-pre {
+    transform: translateX(0) translateY(-50%);
+    opacity: 1;
+  }
+
+  .carousel .arrow-next {
+    right: 10px;
+    transform: translateX(100%) translateY(-50%);
+  }
+  .carousel:hover .arrow-next {
+    transform: translateX(0) translateY(-50%);
+    opacity: 1;
+  }
+
+  .carousel .arrow.arrow-pre::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-left: 1px solid #fff;
+    border-top: 1px solid #fff;
+    transform: rotate(-45deg)
+  }
+  .carousel .arrow.arrow-next::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-left: 1px solid #fff;
+    border-top: 1px solid #fff;
+    transform: rotate(135deg)
+  }
+
+  .carousel .indicators {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+    list-style: none;
+    margin: 0%;
+    padding: 0%;
+    z-index: 10;
+  }
+
+  .carousel .indicators > li {
+    display: inline-block;
+    padding: 5px 0;
+    cursor: pointer;
+  }
+
+  .carousel .indicators > li::before {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 3px;
+    border-radius: 3px;
+    background: rgb(255, 255, 255);
+    transition: all 0.3s;
+  }
+
+  .carousel .indicators > li.active::before {
+    background: #6c6c6c;
+  }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h2>Carousel</h2>
+  <div class="carousel">
+    <div class="panels">
+      <a class='active' href="#1">链接1</a>
+      <a href="#2">链接2</a>
+      <a href="#3">链接3</a>
+      <a href="#4">链接4</a>
+    </div>
+    <div class="arrows">
+      <button class="arrow arrow-pre"></button>
+      <button class="arrow arrow-next"></button>
+    </div>
+    <ul class="indicators">
+      <li class="active"></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+
+  <h2>Carousel</h2>
+  <div class="carousel">
+    <div class="panels">
+      <a class='active' href="#1">链接11</a>
+      <a href="#2">链接22</a>
+      <a href="#3">链接33</a>
+      <a href="#4">链接44</a>
+    </div>
+    <div class="arrows">
+      <button class="arrow arrow-pre"></button>
+      <button class="arrow arrow-next"></button>
+    </div>
+    <ul class="indicators">
+      <li class="active"></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+
+</div>
+
+
+<script>
+
+  class Carousel {
+    constructor($root) {
+      this.$root = $root
+      this.$pre = $root.querySelector('.arrow-pre')
+      this.$next = $root.querySelector('.arrow-next')
+      this.$$indicators = $root.querySelectorAll('.indicators > li')
+      this.$$panels = $root.querySelectorAll('.panels > a')
+
+      this.bind()
+    }
+
+    bind() {
+      this.$pre.onclick = () => {
+        let index = this.getPreIndex()
+        this.setPage(index)
+        this.setIndicator(index)
+      }
+
+      this.$next.onclick = () => {
+        let index = this.getNextIndex()
+        this.setPage(index)
+        this.setIndicator(index)
+      }
+
+      this.$$indicators.forEach($indicator => $indicator.onclick = (e) => {
+        let index = [...this.$$indicators].indexOf(e.target)
+        this.setIndicator(index)
+        this.setPage(index)
+      })
+      
+    }
+
+    getIndex() {
+      return [...this.$$indicators].indexOf(this.$root.querySelector('.indicators .active'))
+    }
+
+    getPreIndex() {
+      return (this.getIndex() - 1 + this.$$indicators.length) % this.$$indicators.length
+    }
+
+    getNextIndex() {
+      return (this.getIndex() + 1) % this.$$indicators.length
+    }
+
+    setPage(index) {
+      this.$$panels.forEach($panel => $panel.classList.remove('active'))
+      this.$$panels[index].classList.add('active')
+    }
+
+    setIndicator(index) {
+      this.$$indicators.forEach($indicator => $indicator.classList.remove('active'))
+      this.$$indicators[index].classList.add('active')
+    }
+  }
+
+  let $$carousel = document.querySelectorAll('.carousel')
+  $$carousel.forEach($root => new Carousel($root))
+
+</script>
+</body>
+</html>
