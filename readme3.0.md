@@ -5,8 +5,6 @@ animation(动画）:animation 属性用来指定一组或多组动画，每组�
 CSS animation 属性是 animation-name，animation-duration, animation-timing-function，animation-delay，animation-iteration-count，animation-direction，animation-fill-mode 和 animation-play-state 属性的一个简写属性形式。
 
 每个动画定义中的属性值的顺序很重要：可以被解析为 <time> 的第一个值被分配给animation-duration， 第二个分配给 animation-delay。
-
-每个动画定义中的值的顺序，对于区分 animation-name 值与其他关键字也很重要。解析时，对于除 animation-name 之外的有效的关键字，必须被前面的简写中没有找到值的属性所接受。此外，在序列化时，animation-name 与以及其他属性值做区分等情况下，必须输出其他属性的默认值。
   
   以下属性出现0次或1次：
 <single-transition-timing-function> (en-US)
@@ -18,7 +16,9 @@ CSS animation 属性是 animation-name，animation-duration, animation-timing-fu
   animation 的 name 值可能是：none，<custom-ident>， <string>
 <time> 可能会出现0、1 或 2 次
   
-```
+
+每个动画定义中的值的顺序，对于区分 animation-name 值与其他关键字也很重要。解析时，对于除 animation-name 之外的有效的关键字，必须被前面的简写中没有找到值的属性所接受。此外，在序列化时，animation-name 与以及其他属性值做区分等情况下，必须输出其他属性的默认值。
+  
 <single-animation-iteration-count>
 动画播放的次数。该值必须是animation-iteration-count可用的值之一。
 
@@ -30,7 +30,7 @@ CSS animation 属性是 animation-name，animation-duration, animation-timing-fu
 
 <single-animation-play-state>
 确定动画是否正在播放。该值必须是animation-play-state中可用的值之一。
-```
+
 
 
 1）slide（滑动）：需要设置from(fromIndex)，to(toIndex)，direction。
@@ -113,8 +113,6 @@ css($to, {
 
 CSS属性 scale 允许你可以分别且独立地指定CSS属性 transform 缩放的比例。这更好地映射到典型的UI（用户界面）用法中，并免去了在指定变换值时必须记住变换函数的精确顺序的麻烦。
 
-语法：
-```
 none:指定不进行缩放。
 scale: none;
 
@@ -129,4 +127,4 @@ scale: 2 0.5;
 
 三个值：三个数值即分别指定了3D比例的X轴、Y轴和Z轴的缩放系数. 相当于一个scale3d()函数。
 scale: 2 0.5 2;
-```
+
